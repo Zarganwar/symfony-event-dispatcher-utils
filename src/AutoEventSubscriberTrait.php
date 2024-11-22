@@ -46,7 +46,7 @@ trait AutoEventSubscriberTrait
 
 		$output = [];
 		$typeNames = method_exists($parameterType, 'getTypes')
-			? array_map(fn($type) => $type->getName(), $parameterType->getTypes())
+			? array_map(static fn($type) => $type->getName(), $parameterType->getTypes())
 			: [$parameterType->getName()];
 
 		foreach ($typeNames as $typeName) {
