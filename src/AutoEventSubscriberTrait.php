@@ -58,4 +58,4 @@ trait AutoEventSubscriberTrait
 
 		return $output;
 	}
-
+}
