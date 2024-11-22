@@ -16,6 +16,19 @@ use function method_exists;
  * The __invoke method must have exactly one parameter with a type or types (type|type).
  * The type of the parameter is the event to which the class will be subscribed.
  * The __invoke method is the method that will be called when the event is dispatched.
+ * <code>
+ * <?php
+ *  class ReactsOnSomeKindOfEventSubscriber
+ *  {
+ *		use AutoEventSubscriberTrait;
+ *
+ *		public function __invoke(SomeKindOfEvent $event): void
+ *		{
+ *			process($event);
+ *		}
+ *  }
+ * </code>
+ *
  */
 trait AutoEventSubscriberTrait
 {
