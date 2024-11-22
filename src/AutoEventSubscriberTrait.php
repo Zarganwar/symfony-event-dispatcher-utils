@@ -58,9 +58,14 @@ trait AutoEventSubscriberTrait
 		}
 
 		$output = [];
-		$typeNames = method_exists($parameterType, 'getTypes')
-			? array_map(static fn($type) => $type->getName(), $parameterType->getTypes())
-			: [$parameterType->getName()];
+		
+		if (method_exists($parameterType, 'getTypes')) {
+			$typeNames = array_map(static fn($type) => $type->getName(), $parameterType->getTypes());
+		} elseif (method_exists($parameterType, 'getName')) {
+			$typeNames = [ $parameterType->getName() ];
+		} else {
+			throw new LogicException("Unable to read type name of parameter '{$parameterName}'.");
+		}
 
 		foreach ($typeNames as $typeName) {
 
