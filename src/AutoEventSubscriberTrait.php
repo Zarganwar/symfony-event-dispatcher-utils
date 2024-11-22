@@ -8,6 +8,7 @@ use ReflectionClass;
 use function array_map;
 use function class_exists;
 use function count;
+use function interface_exists;
 use function method_exists;
 
 /**
@@ -49,7 +50,8 @@ trait AutoEventSubscriberTrait
 			: [$parameterType->getName()];
 
 		foreach ($typeNames as $typeName) {
-			$output[$typeName] = class_exists($typeName)
+
+			$output[$typeName] = interface_exists($typeName) || class_exists($typeName)
 				? $methodName
 				: throw new LogicException("Class '{$typeName}' not found.");
 		}
@@ -57,4 +59,3 @@ trait AutoEventSubscriberTrait
 		return $output;
 	}
 
-}
