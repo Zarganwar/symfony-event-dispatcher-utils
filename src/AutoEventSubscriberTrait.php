@@ -18,7 +18,10 @@ use function method_exists;
  * The __invoke method is the method that will be called when the event is dispatched.
  * <code>
  * <?php
- *  class ReactsOnSomeKindOfEventSubscriber
+ *
+ *  use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ *
+ *  class ReactsOnSomeKindOfEventSubscriber implements EventSubscriberInterface;
  *  {
  *		use AutoEventSubscriberTrait;
  *
