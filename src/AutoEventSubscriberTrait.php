@@ -11,7 +11,6 @@ use function array_map;
 use function class_exists;
 use function count;
 use function interface_exists;
-use function method_exists;
 
 /**
  * This trait is used to automatically subscribe to events. It requires the __invoke method to be present in the class.

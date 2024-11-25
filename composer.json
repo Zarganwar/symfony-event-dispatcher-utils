@@ -19,9 +19,11 @@
       "Zarganwar\\SymfonyEventDispatcherUtils\\Tests\\": "tests"
     }
   },
+  "require": {
+    "php": ">=8.0"
+  },
   "require-dev": {
     "phpstan/phpstan": "^2.0",
     "nette/tester": "^2.5"
-  },
-  "version": "0.1.0"
+  }
 }
