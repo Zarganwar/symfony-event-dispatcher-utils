@@ -16,6 +16,22 @@ use function method_exists;
  * The __invoke method must have exactly one parameter with a type or types (type|type).
  * The type of the parameter is the event to which the class will be subscribed.
  * The __invoke method is the method that will be called when the event is dispatched.
+ * <code>
+ * <?php
+ *
+ *  use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+ *
+ *  class ReactsOnSomeKindOfEventSubscriber implements EventSubscriberInterface;
+ *  {
+ *		use AutoEventSubscriberTrait;
+ *
+ *		public function __invoke(SomeKindOfEvent $event): void
+ *		{
+ *			process($event);
+ *		}
+ *  }
+ * </code>
+ *
  */
 trait AutoEventSubscriberTrait
 {
@@ -45,9 +61,14 @@ trait AutoEventSubscriberTrait
 		}
 
 		$output = [];
-		$typeNames = method_exists($parameterType, 'getTypes')
-			? array_map(fn($type) => $type->getName(), $parameterType->getTypes())
-			: [$parameterType->getName()];
+		
+		if (method_exists($parameterType, 'getTypes')) {
+			$typeNames = array_map(static fn($type) => $type->getName(), $parameterType->getTypes());
+		} elseif (method_exists($parameterType, 'getName')) {
+			$typeNames = [ $parameterType->getName() ];
+		} else {
+			throw new LogicException("Unable to read type name of parameter '{$parameterName}'.");
+		}
 
 		foreach ($typeNames as $typeName) {
 
@@ -58,4 +79,4 @@ trait AutoEventSubscriberTrait
 
 		return $output;
 	}
-
+}
