@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Zarganwar/SymfonyEventDispatcherUtils;
+namespace Zarganwar\SymfonyEventDispatcherUtils;
 
 use LogicException;
 use ReflectionClass;
+use ReflectionNamedType;
+use ReflectionUnionType;
 use function array_map;
 use function class_exists;
 use function count;
@@ -23,12 +25,12 @@ use function method_exists;
  *
  *  class ReactsOnSomeKindOfEventSubscriber implements EventSubscriberInterface;
  *  {
- *		use AutoEventSubscriberTrait;
+ *        use AutoEventSubscriberTrait;
  *
- *		public function __invoke(SomeKindOfEvent $event): void
- *		{
- *			process($event);
- *		}
+ *        public function __invoke(SomeKindOfEvent|OrEventInterface $event): void
+ *        {
+ *            process($event);
+ *        }
  *  }
  * </code>
  *
@@ -38,7 +40,7 @@ trait AutoEventSubscriberTrait
 
 	public static function getSubscribedEvents(): array
 	{
-		$reflection = new ReflectionClass(self::class);
+		$reflection = new ReflectionClass(static::class);
 		$methodName = '__invoke';
 
 		if (!$reflection->hasMethod($methodName)) {
@@ -60,23 +62,26 @@ trait AutoEventSubscriberTrait
 			throw new LogicException("Parameter '{$parameterName}' of method '{$methodName}' must have a type.");
 		}
 
-		$output = [];
-		
-		if (method_exists($parameterType, 'getTypes')) {
-			$typeNames = array_map(static fn($type) => $type->getName(), $parameterType->getTypes());
-		} elseif (method_exists($parameterType, 'getName')) {
-			$typeNames = [ $parameterType->getName() ];
+		$subscribedEvents = [];
+
+		if ($parameterType instanceof ReflectionUnionType) {
+			$typeNames = array_map(
+				static fn(ReflectionNamedType $type) => $type->getName(),
+				$parameterType->getTypes(),
+			);
+		} elseif ($parameterType instanceof ReflectionNamedType) {
+			$typeNames = [$parameterType->getName()];
 		} else {
 			throw new LogicException("Unable to read type name of parameter '{$parameterName}'.");
 		}
 
 		foreach ($typeNames as $typeName) {
-
-			$output[$typeName] = interface_exists($typeName) || class_exists($typeName)
+			$subscribedEvents[$typeName] = interface_exists($typeName) || class_exists($typeName)
 				? $methodName
 				: throw new LogicException("Class '{$typeName}' not found.");
 		}
 
-		return $output;
+		return $subscribedEvents;
 	}
+
 }

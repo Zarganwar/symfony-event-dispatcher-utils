@@ -1,0 +1,5 @@
+compose.yml
+composer.lock
+Dockerfile
+.idea
+vendor

@@ -1,0 +1,7 @@
+parameters:
+	level: 10
+	paths:
+		- src
+		- tests
+	ignoreErrors:
+		- '#Trait Zarganwar\\SymfonyEventDispatcherUtils\\AutoEventSubscriberTrait is used zero times and is not analysed.#'

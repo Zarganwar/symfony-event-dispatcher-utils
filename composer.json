@@ -1,0 +1,26 @@
+{
+  "name": "zarganwar/symfony-event-dispatcher-utils",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Martin Jirasek",
+      "email": "jertin@seznam.cz"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Zarganwar\\SymfonyEventDispatcherUtils\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Zarganwar\\SymfonyEventDispatcherUtils\\Tests\\": "tests"
+    }
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^2.0",
+    "nette/tester": "^2.5"
+  }
+}
